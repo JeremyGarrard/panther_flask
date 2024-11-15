@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panther Telemetry Map</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1, h2 {
+            color: #2a4d69;
+        }
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        #map {
+            height: 500px;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        select, button {
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+            border: 1px solid #aaa;
+            font-size: 1em;
+        }
+        button {
+            background-color: #2a4d69;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #1e3750;
+        }
+    </style>
+</head>
+<body>
+    <h1>Panther Telemetry Map</h1>
+    <form method="POST" action="/">
+        <label for="panther_id">Choose a Panther ID:</label>
+        <select name="panther_id" id="panther_id" onchange="this.form.submit()">
+            {% for id in panther_ids %}
+            <option value="{{ id }}" {% if id == selected_panther %}selected{% endif %}>{{ id }}</option>
+            {% endfor %}
+        </select>
+        <form action="/download_kml/{{ selected_panther }}" method="GET">
+            <button type="submit">Download KML for Google Earth</button>
+        </form>
+    </form>
+
+    <h2>Panther Path</h2>
+    <div id="map">{{ map_html|safe }}</div>
+</body>
+</html>
